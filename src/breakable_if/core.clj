@@ -6,11 +6,16 @@
   ([condition then-body]
    `(try
        (if ~condition ~then-body)
-       (catch breakable_if.NonBreakableIfException e#)))  ; this exception is deliberately ignored.
+       (catch breakable_if.NonBreakableIfException e#
+         (.getBreakReturnValue e#))))
   ([condition then-body else-body]
    `(try
       (if ~condition ~then-body ~else-body)
-      (catch breakable_if.NonBreakableIfException e#))))  ; this exception is deliberately ignored.
+      (catch breakable_if.NonBreakableIfException e#
+        (.getBreakReturnValue e#)))))
 
-(defn iffy-break []
-  (throw (breakable_if.NonBreakableIfException. "You must only call iffy-break within an iffy body.")))
+(defn iffy-break
+  ([]
+   (throw (breakable_if.NonBreakableIfException. (cast Object nil))))
+  ([iffy-return-value]
+   (throw (breakable_if.NonBreakableIfException. iffy-return-value))))

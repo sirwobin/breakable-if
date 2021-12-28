@@ -5,10 +5,11 @@ that works like clojure.core/if but which permits one to break out of the if.
 
 You should structure your code differently instead of using this proof of concept.
 
-One thing that works particularly well with if is that it returns a value.  iffy
-will do the same.  In the library's current form, iffy returns nil if you break
-which may not be what you want.  It's trivial to extend iffy-break to specify an
-iffy return value.
+One thing that works particularly well with if is that it returns a value and iffy
+will do the same.  The final value of a then-body or else-body will normally be the
+return value of iffy.  If you call iffy-break without a value then iffy will return
+nil.  If you call iffy-break with a value, that value will become the value returned
+by iffy.
 
 ## Usage
 
@@ -30,6 +31,16 @@ iffy return value.
       5)
 before
 => nil
+
+(iffy true
+      (do
+        (println "before")
+        (iffy-break 99)
+        (println "woo")
+        3)
+      5)
+before
+=> 99
 ```
 
 ## License

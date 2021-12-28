@@ -1,2 +1,12 @@
 (ns breakable-if.NonBreakableIfException
-  (:gen-class :extends RuntimeException))
+  (:gen-class :extends RuntimeException
+              :init    init
+              :constructors {[Object] [String]}
+              :state   state
+              :methods [[getBreakReturnValue [] Object]]))
+
+(defn -init [^Object return-value]
+  [["You must only call iffy-break within an iffy body."] (atom return-value)])
+
+(defn -getBreakReturnValue [this]
+  @(.state this))

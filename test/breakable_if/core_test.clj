@@ -6,7 +6,7 @@
   (testing "Flow of control without breaks."
     (is (= (iffy true 1 0) 1))
     (is (= (iffy false 1 0) 0)))
-  (testing "Flow of control with breaks"
+  (testing "Flow of control without return value and with breaks"
     (let [x (atom nil)]
       (iffy true
             (do
@@ -36,4 +36,28 @@
               (reset! x 1)
               (iffy-break)
               (reset! x 2)))
-      (is (= @x 1)))))
+      (is (= @x 1))))
+  (testing "Flow of control with return value and with breaks"
+    (is (= (iffy true
+                 (do
+                   (iffy-break 99)
+                   1))
+           99))
+    (is (= (iffy false
+                 (do
+                   (iffy-break 100)
+                   1))
+           nil))
+    (is (= (iffy true
+                 (do
+                   (iffy-break 101)
+                   1)
+                 2)
+           101))
+    (is (= (iffy false
+                 1
+                 (do
+                   2
+                   (iffy-break 102)
+                   3))
+           102))))
