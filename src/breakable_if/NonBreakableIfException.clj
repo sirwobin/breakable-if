@@ -6,7 +6,7 @@
               :methods [[getBreakReturnValue [] Object]]))
 
 (defn -init [^Object return-value]
-  [["You must only call iffy-break within an iffy body."] (atom return-value)])
+  [["You must only call iffy-break within an iffy body."] return-value])
 
 (defn -getBreakReturnValue [this]
-  @(.state this))
+  (.state this))
